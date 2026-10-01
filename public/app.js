@@ -24,7 +24,7 @@ function transform(a, b) {
 function transformIndex(index, op) { if (noop(op)) return index; if (op.type === 'insert') return op.position <= index ? index + op.text.length : index; return index <= op.position ? index : Math.max(op.position, index - op.length); }
 function paint() { highlighter.replaceChildren(); let start = 0; while (start < documentText.length) { const color = marks[start] || '#dbe7ef'; let end = start + 1; while (end < documentText.length && (marks[end] || '#dbe7ef') === color) end++; const mark = document.createElement('span'); mark.className = 'author-mark'; mark.style.setProperty('--mark', color); mark.textContent = documentText.slice(start, end); highlighter.append(mark); start = end; } if (documentText.endsWith('\n')) highlighter.append(document.createElement('br')); highlighter.scrollTop = editor.scrollTop; highlighter.scrollLeft = editor.scrollLeft; }
 function render(value, selectionStart = editor.selectionStart, selectionEnd = editor.selectionEnd) { applying = true; editor.value = value; paint(); editor.setSelectionRange(Math.min(selectionStart, value.length), Math.min(selectionEnd, value.length)); applying = false; $('#characters').textContent = `${value.length}자`; }
-function timeOf(value = new Date()) { return new Intl.DateTimeFormat('ko-KR', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false }).format(new Date(value)); }
+function timeOf(value = new Date()) { const date = new Date(value); const clock = new Intl.DateTimeFormat('ko-KR', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false }).format(date); return `${clock}.${String(Math.floor(date.getMilliseconds() / 10)).padStart(2, '0')}`; }
 function operationLabel(op) { return op.type === 'insert' ? `삽입 “${op.text.replace(/\n/g, '↵').slice(0, 20)}” @ ${op.position}` : `삭제 ${op.length}자 @ ${op.position}`; }
 function log(op, kind, timestamp) { const list = $('#log'); list.querySelector('.empty')?.remove(); const item = document.createElement('li'); item.style.gridTemplateColumns = '70px 10px 1fr'; item.innerHTML = `<time>${timeOf(timestamp)}</time><i class="log-swatch" style="--editor-color:${op.color || '#9aabb5'}"></i><span>${kind} · ${operationLabel(op)}</span>`; list.prepend(item); while (list.children.length > 16) list.lastElementChild.remove(); }
 function updateStatus() { $('#revision').textContent = serverRevision; $('#pending').textContent = pending.length; }
@@ -50,7 +50,7 @@ function connect() {
 editor.addEventListener('scroll', () => { highlighter.scrollTop = editor.scrollTop; highlighter.scrollLeft = editor.scrollLeft; });
 colorInput.addEventListener('input', () => localStorage.setItem('ot-editor-color', colorInput.value));
 function tickClock() { $('#clock').textContent = timeOf(); }
-tickClock(); setInterval(tickClock, 1000);
+tickClock(); setInterval(tickClock, 10);
 $('#copy').addEventListener('click', async () => { const next = roomInput.value.replace(/[^a-zA-Z0-9_-]/g, '').slice(0, 48) || 'presentation'; location.href = `${location.pathname}?room=${encodeURIComponent(next)}`; });
 $('#clear-log').addEventListener('click', () => { $('#log').innerHTML = '<li class="empty">첫 편집을 기다리고 있습니다.</li>'; });
 connect();
