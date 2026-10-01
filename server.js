@@ -94,7 +94,7 @@ wss.on('connection', (socket) => {
     activeRoom.document = apply(activeRoom.document, operation);
     applyMarks(activeRoom.marks, operation);
     activeRoom.history.push(operation); activeRoom.revision += 1;
-    broadcast(activeRoom, { type: 'operation', operation, revision: activeRoom.revision, author: message.clientId });
+    broadcast(activeRoom, { type: 'operation', operation, revision: activeRoom.revision, author: message.clientId, timestamp: new Date().toISOString() });
   });
   socket.on('close', () => {
     if (!activeRoom) return;
