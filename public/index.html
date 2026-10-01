@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OT · 동시에 쓰는 문서</title><link rel="stylesheet" href="style.css" /><style>.editor-card .editor-stage textarea{height:100%;resize:none;color:transparent;background:transparent;caret-color:var(--ink);overflow:auto}.editor-card .editor-stage textarea::selection{background:rgba(55,120,242,.28)}.editor-card .editor-stage textarea::placeholder{color:#a7b5bd}@media(max-width:840px){.editor-stage{height:330px}}</style>
+</head>
+<body>
+  <main>
+    <header>
+      <div><p class="eyebrow">LIVE COLLABORATION LAB</p><h1>Operational Transformation</h1><p class="subtitle">서버가 연산을 순서에 맞게 변환해, 모두가 같은 문서에 도달합니다.</p></div>
+      <div class="header-controls"><div class="color-control"><label for="color">내 글씨 색</label><input id="color" type="color" value="#3778f2" /></div><div class="room-box"><label for="room">발표 방</label><div><input id="room" maxlength="48" /><button id="copy">링크 복사</button></div><small>같은 방 이름의 링크를 공유하세요.</small></div></div>
+    </header>
+    <section class="stats" aria-label="상태"><div><span>연결 상태</span><strong id="connection">연결 중</strong></div><div><span>참여자</span><strong id="peers">1명</strong></div><div><span>서버 리비전</span><strong id="revision">0</strong></div><div><span>대기 연산</span><strong id="pending">0</strong></div></section>
+    <section class="workspace">
+      <article class="editor-card"><div class="card-head"><span class="dot"></span><span>공동 문서</span><span class="live">● LIVE</span></div><div class="editor-stage"><div id="highlighter" aria-hidden="true"></div><textarea id="editor" spellcheck="false" placeholder="여기를 함께 편집해 보세요. 서로 같은 위치에 동시에 입력해도 문서가 수렴합니다."></textarea></div><div class="editor-foot"><span id="characters">0자</span><span>서버 권위 · 낙관적 편집</span></div></article>
+      <aside>
+        <article class="concept"><p class="eyebrow">WHAT JUST HAPPENED?</p><h2>연산을 변환합니다</h2><p>각 편집은 <code>삽입</code> 또는 <code>삭제</code> 연산입니다. 뒤늦게 도착한 연산은 이미 적용된 연산을 기준으로 위치를 다시 계산합니다.</p><div class="formula">T(local, remote) → local′<br />T(remote, local) → remote′</div></article>
+        <article class="stream"><div class="stream-title"><h2>연산 흐름</h2><button id="clear-log">지우기</button></div><ol id="log" aria-live="polite"><li class="empty">첫 편집을 기다리고 있습니다.</li></ol></article>
+      </aside>
+    </section>
+    <footer><span>OT DEMO</span><span>같은 텍스트를 동시에 바꿔 보세요: 충돌이 나도 최종 문서는 하나로 수렴합니다.</span></footer>
+  </main><script src="app.js"></script>
+</body></html>
